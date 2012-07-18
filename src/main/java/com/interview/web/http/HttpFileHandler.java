@@ -65,10 +65,6 @@ public class HttpFileHandler implements SocketHandler, HttpHandler {
     }
 
     public String getRoot() {
-        if(root == null) {
-            return ".";
-        }
-
         return root;
     }
 

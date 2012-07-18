@@ -3,6 +3,7 @@ package com.interview.web.http;
 import com.interview.web.utils.Constants;
 
 import java.io.*;
+import java.net.URLDecoder;
 
 public class HttpGetHandler extends HttpFileHandler implements HttpHandler {
 
@@ -19,7 +20,7 @@ public class HttpGetHandler extends HttpFileHandler implements HttpHandler {
         String path = request.getHeader(Constants.PATH);
         getLogger().info("GET for " + path);
 
-        File file = new File(getRoot(), path);
+        File file = new File(getRoot(), URLDecoder.decode(path, "UTF-8"));
         if (file.exists()) {
             if (file.isDirectory()) {
                 sendFolder(out, file);
