@@ -9,8 +9,9 @@ import java.util.concurrent.Executors;
 
 public class App {
     public static void main(String[] args) throws IOException, InterruptedException {
+        String rootFolder = getRootDirectory(args);
 
-        HttpFileHandler httpFileHandler = createHttpHandler("/Users/dplacinta");
+        HttpFileHandler httpFileHandler = createHttpHandler(rootFolder);
         Server server = new Server(httpFileHandler, 10, 8888);
 
         ExecutorService service = Executors.newSingleThreadExecutor();
@@ -22,6 +23,14 @@ public class App {
 
         server.stop();
         service.shutdown();
+    }
+
+    private static String getRootDirectory(String[] args) {
+        String rootFolder = args.length > 0 ? args[0] : ".";
+
+        System.out.println("Root directory: " + rootFolder);
+
+        return rootFolder;
     }
 
     private static HttpFileHandler createHttpHandler(String rootFolder) {
