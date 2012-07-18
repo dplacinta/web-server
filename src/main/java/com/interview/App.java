@@ -10,9 +10,11 @@ import java.util.concurrent.Executors;
 public class App {
     public static void main(String[] args) throws IOException, InterruptedException {
         String rootFolder = getRootDirectory(args);
+        int threadsCount = getThreadsCount(args);
+        int port = getPort(args);
 
         HttpFileHandler httpFileHandler = createHttpHandler(rootFolder);
-        Server server = new Server(httpFileHandler, 10, 8888);
+        Server server = new Server(httpFileHandler, threadsCount, port);
 
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(server);
@@ -23,14 +25,6 @@ public class App {
 
         server.stop();
         service.shutdown();
-    }
-
-    private static String getRootDirectory(String[] args) {
-        String rootFolder = args.length > 0 ? args[0] : ".";
-
-        System.out.println("Root directory: " + rootFolder);
-
-        return rootFolder;
     }
 
     private static HttpFileHandler createHttpHandler(String rootFolder) {
@@ -49,5 +43,21 @@ public class App {
         httpFileHandler.setRoot(rootFolder);
         httpFileHandler.setSuccessor(postHandler);
         return httpFileHandler;
+    }
+
+    private static int getPort(String[] args) {
+        return args.length > 2 ? Integer.parseInt(args[2]) : 8888;
+    }
+
+    private static int getThreadsCount(String[] args) {
+        return args.length > 1 ? Integer.parseInt(args[1]) : 10;
+    }
+
+    private static String getRootDirectory(String[] args) {
+        String rootFolder = args.length > 0 ? args[0] : ".";
+
+        System.out.println("Root directory: " + rootFolder);
+
+        return rootFolder;
     }
 }
